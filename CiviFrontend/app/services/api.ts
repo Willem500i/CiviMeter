@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USE_DUMMY_API = true; // Set this to false to use real API calls
+const USE_DUMMY_API = false; // Set this to false to use real API calls
 
 const API_URL = "http://10.150.242.114:5000/";
 
@@ -13,6 +13,7 @@ interface UploadPhotoResponse {
 export async function uploadPhoto(
   photoUri: string,
   userId: string,
+  location: { latitude: number; longitude: number },
 ): Promise<UploadPhotoResponse> {
   if (USE_DUMMY_API) {
     return new Promise<UploadPhotoResponse>((resolve) => {
@@ -28,6 +29,8 @@ export async function uploadPhoto(
       name: "photo.jpg",
     } as any);
     formData.append("userId", userId);
+    formData.append("latitude", location.latitude.toString());
+    formData.append("longitude", location.longitude.toString());
 
     try {
       const response = await axios.post(`${API_URL}/api/submit`, formData);
@@ -213,6 +216,10 @@ interface FetchUserProfileResponse {
   data: UserProfile;
 }
 
+interface UploadUserProfileResponse {
+  data: UserProfile;
+}
+
 export async function fetchUserProfile(
   userId: string,
 ): Promise<FetchUserProfileResponse> {
@@ -244,19 +251,13 @@ export async function fetchUserProfile(
   }
 }
 
-interface UploadUserProfileResponse {
-  data: {
-    message: string;
-  };
-}
-
 export async function uploadUserProfile(
   userProfile: UserProfile,
 ): Promise<UploadUserProfileResponse> {
   if (USE_DUMMY_API) {
     return new Promise<UploadUserProfileResponse>((resolve) => {
       setTimeout(() => {
-        resolve({ data: { message: "Profile uploaded successfully" } });
+        resolve({ data: userProfile });
       }, 1000);
     });
   } else {
@@ -272,6 +273,7 @@ export async function uploadUserProfile(
     }
   }
 }
+
 interface Location {
   id: number;
   latitude: number;

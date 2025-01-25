@@ -8,10 +8,12 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 import { getUserId } from "../services/utils";
+import { fetchUserProfile, uploadUserProfile } from "../services/api";
 
 const majorCities = [
   { label: "Washington DC", value: "Washington DC" },
@@ -37,11 +39,26 @@ export default function ProfileScreen() {
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchUserId() {
+    async function fetchUserData() {
       const id = await getUserId();
       setUserId(id);
+
+      if (id) {
+        try {
+          const response = await fetchUserProfile(id);
+          const profile = response.data;
+          setFirstName(profile.firstName);
+          setLastName(profile.lastName);
+          setEmail(profile.email);
+          setPhoneNumber(profile.phoneNumber);
+          setHomeCity(profile.homeCity);
+          setProfilePicture(profile.profilePicture);
+        } catch (error) {
+          console.error("Error fetching user profile:", error);
+        }
+      }
     }
-    fetchUserId();
+    fetchUserData();
   }, []);
 
   const pickImage = async () => {
@@ -57,17 +74,26 @@ export default function ProfileScreen() {
     }
   };
 
-  const saveProfile = () => {
-    // Save profile information to the backend or local storage
-    console.log("Profile saved:", {
-      userId,
-      firstName,
-      lastName,
-      email,
-      phoneNumber,
-      homeCity,
-      profilePicture,
-    });
+  const saveProfile = async () => {
+    if (userId) {
+      const userProfile = {
+        userId,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        homeCity,
+        profilePicture,
+      };
+
+      try {
+        const response = await uploadUserProfile(userProfile);
+        Alert.alert("Success", "Profile uploaded successfully");
+      } catch (error) {
+        console.error("Error uploading user profile:", error);
+        Alert.alert("Error", "Failed to save profile");
+      }
+    }
   };
 
   return (
