@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const USE_DUMMY_API = false; // Set this to false to use real API calls
+const USE_DUMMY_API = true; // Set this to false to use real API calls
 
 const API_URL = "http://10.150.242.114:5000/";
 
@@ -14,6 +14,7 @@ export async function uploadPhoto(
   photoUri: string,
   userId: string,
   location: { latitude: number; longitude: number },
+  incidentId: number,
 ): Promise<UploadPhotoResponse> {
   if (USE_DUMMY_API) {
     return new Promise<UploadPhotoResponse>((resolve) => {
@@ -31,6 +32,7 @@ export async function uploadPhoto(
     formData.append("userId", userId);
     formData.append("latitude", location.latitude.toString());
     formData.append("longitude", location.longitude.toString());
+    formData.append("incidentId", incidentId.toString());
 
     try {
       const response = await axios.post(`${API_URL}/api/submit`, formData);

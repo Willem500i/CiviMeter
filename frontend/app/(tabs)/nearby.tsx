@@ -23,6 +23,7 @@ export default function NearbyScreen() {
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const [incidentId, setIncidentId] = useState(0);
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -45,6 +46,13 @@ export default function NearbyScreen() {
   }, []);
 
   const handleNewIncident = async () => {
+    setIncidentId(0); // New incidents have ID 0
+    setShowCamera(true);
+  };
+
+  const handleReportIncident = (id) => {
+    setIncidentId(id); // Set the incident ID for existing incidents
+    setSelectedLocation(null); // Close the popup
     setShowCamera(true);
   };
 
@@ -122,11 +130,13 @@ export default function NearbyScreen() {
             <Text style={styles.modalDescription}>
               Coin Prize: {selectedLocation.coinPrize}
             </Text>
-            <Button
-              title="Report Incident"
-              onPress={() => handleReportIncident(selectedLocation.id)}
-            />
-            <Button title="Close" onPress={() => setSelectedLocation(null)} />
+            <View style={styles.modalButtonContainer}>
+              <Button
+                title="Report Incident"
+                onPress={() => handleReportIncident(selectedLocation.id)}
+              />
+              <Button title="Close" onPress={() => setSelectedLocation(null)} />
+            </View>
           </View>
         </Modal>
       )}
@@ -136,10 +146,17 @@ export default function NearbyScreen() {
       >
         <Text style={styles.newIncidentButtonText}>+</Text>
       </TouchableOpacity>
-      {showCamera && <CameraScreen onClose={() => setShowCamera(false)} />}
-      <TouchableOpacity style={styles.centerButton} onPress={centerMapOnUser}>
-        <Ionicons name="locate" size={24} color="white" />
-      </TouchableOpacity>
+      {showCamera && (
+        <CameraScreen
+          onClose={() => setShowCamera(false)}
+          incidentId={incidentId}
+        />
+      )}
+      {!showCamera && (
+        <TouchableOpacity style={styles.centerButton} onPress={centerMapOnUser}>
+          <Ionicons name="locate" size={24} color="white" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
