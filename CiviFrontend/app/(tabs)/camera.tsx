@@ -1,100 +1,41 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Modal,
-  Image,
-} from "react-native";
-import { Camera, CameraType } from "expo-camera";
-import * as MediaLibrary from "expo-media-library";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { useState } from "react";
+import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function CameraComponent() {
-  const [hasPermission, setHasPermission] = useState<null | boolean>(null);
-  const [type, setType] = useState(CameraType.back);
-  const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const cameraRef = useRef<typeof Camera>(null);
+export default function App() {
+  const [facing, setFacing] = useState<CameraType>("back");
+  const [permission, requestPermission] = useCameraPermissions();
 
-  useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(status === "granted");
-    })();
-  }, []);
-
-  if (hasPermission === null) {
+  if (!permission) {
+    // Camera permissions are still loading.
     return <View />;
   }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+
+  if (!permission.granted) {
+    // Camera permissions are not granted yet.
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
   }
 
-  const takePicture = async () => {
-    if (cameraRef.current) {
-      try {
-        const photo = await cameraRef.current.takePictureAsync();
-        setCapturedImage(photo.uri);
-      } catch (error) {
-        console.error("Error taking picture:", error);
-      }
-    }
-  };
-
-  const saveImage = async () => {
-    if (capturedImage) {
-      try {
-        await MediaLibrary.createAssetAsync(capturedImage);
-        alert("Picture saved to your gallery!");
-        setCapturedImage(null);
-      } catch (error) {
-        console.error("Error saving picture:", error);
-      }
-    }
-  };
-
-  const toggleCameraType = () => {
-    setType((currentType) =>
-      currentType === CameraType.back ? CameraType.front : CameraType.back,
-    );
-  };
+  function toggleCameraFacing() {
+    setFacing((current) => (current === "back" ? "front" : "back"));
+  }
 
   return (
     <View style={styles.container}>
-      <Camera style={styles.camera} type={type} ref={cameraRef}>
+      <CameraView style={styles.camera} facing={facing}>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={toggleCameraType}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <Text style={styles.text}>Flip Camera</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={takePicture}>
-            <Text style={styles.text}>Take Picture</Text>
-          </TouchableOpacity>
         </View>
-      </Camera>
-
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={!!capturedImage}
-      >
-        <View style={styles.modalContainer}>
-          {capturedImage && (
-            <Image
-              source={{ uri: capturedImage }}
-              style={styles.capturedImage}
-            />
-          )}
-          <TouchableOpacity style={styles.button} onPress={saveImage}>
-            <Text style={styles.text}>Save Image</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setCapturedImage(null)}
-          >
-            <Text style={styles.text}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      </CameraView>
     </View>
   );
 }
@@ -102,16 +43,20 @@ export default function CameraComponent() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: "center",
+  },
+  message: {
+    textAlign: "center",
+    paddingBottom: 10,
   },
   camera: {
     flex: 1,
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: "transparent",
     flexDirection: "row",
-    margin: 20,
-    justifyContent: "space-between",
+    backgroundColor: "transparent",
+    margin: 64,
   },
   button: {
     flex: 1,
@@ -119,16 +64,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 18,
+    fontSize: 24,
+    fontWeight: "bold",
     color: "white",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  capturedImage: {
-    width: "90%",
-    height: "50%",
   },
 });
