@@ -10,6 +10,7 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import styles from "../styles";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();

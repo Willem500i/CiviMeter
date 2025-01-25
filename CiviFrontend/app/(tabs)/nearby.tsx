@@ -14,6 +14,7 @@ import * as Location from "expo-location";
 import { fetchLocations, uploadPhoto } from "../services/api";
 import { getUserId } from "../services/utils";
 import CameraScreen from "./camera";
+import styles from "../styles";
 
 export default function NearbyScreen() {
   const [location, setLocation] = useState(null);
@@ -122,52 +123,3 @@ export default function NearbyScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 15,
-  },
-  modalDescription: {
-    fontSize: 16,
-    marginBottom: 15,
-  },
-  newIncidentButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    backgroundColor: "blue",
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  newIncidentButtonText: {
-    color: "white",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-});

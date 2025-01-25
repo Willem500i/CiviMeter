@@ -3,7 +3,6 @@ import * as Location from "expo-location";
 import { useRef, useState, useEffect } from "react";
 import {
   Button,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -13,6 +12,7 @@ import {
 import { uploadPhoto } from "../services/api";
 import { getUserId } from "../services/utils";
 import { Ionicons } from "@expo/vector-icons";
+import styles from "../styles";
 
 export default function CameraScreen({ onClose }: { onClose: () => void }) {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -128,67 +128,3 @@ export default function CameraScreen({ onClose }: { onClose: () => void }) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  message: {
-    textAlign: "center",
-    paddingBottom: 10,
-  },
-  camera: {
-    flex: 1,
-  },
-  buttonContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  takePhotoButton: {
-    alignSelf: "center",
-  },
-  circleButton: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: "white",
-  },
-  closeButton: {
-    position: "absolute",
-    top: 40,
-    right: 20,
-    backgroundColor: "red",
-    padding: 10,
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  photoContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  photo: {
-    width: "100%",
-    height: "100%",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    position: "absolute",
-    bottom: 30,
-    width: "80%",
-  },
-  retakeButton: {
-    alignSelf: "flex-start",
-  },
-  saveButton: {
-    alignSelf: "flex-end",
-  },
-});

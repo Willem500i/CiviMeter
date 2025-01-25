@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchHistory } from "../services/api";
 import { getUserId } from "../services/utils";
+import styles from "../styles";
 
 interface HistoryEntry {
   licensePlate: string;
@@ -37,47 +38,24 @@ export default function HistoryScreen() {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.historyContainer}>
       {history.map((entry, index) => (
         <View key={index} style={styles.entryContainer}>
-          <Image source={{ uri: entry.imageUrl }} style={styles.image} />
-          <Text style={styles.text}>License Plate: {entry.licensePlate}</Text>
-          <Text style={styles.text}>Description: {entry.description}</Text>
-          <Text style={styles.text}>
+          <Image source={{ uri: entry.imageUrl }} style={styles.historyImage} />
+          <Text style={styles.historyText}>
+            License Plate: {entry.licensePlate}
+          </Text>
+          <Text style={styles.historyText}>
+            Description: {entry.description}
+          </Text>
+          <Text style={styles.historyText}>
             Safety Hazard: {entry.isSafetyHazard ? "Yes" : "No"}
           </Text>
-          <Text style={styles.text}>Coins Awarded: {entry.coinsAwarded}</Text>
+          <Text style={styles.historyText}>
+            Coins Awarded: {entry.coinsAwarded}
+          </Text>
         </View>
       ))}
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    alignItems: "center",
-    backgroundColor: "#000", // Set background color to black for better contrast
-  },
-  entryContainer: {
-    marginBottom: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    width: "100%",
-    alignItems: "center",
-    backgroundColor: "#333", // Set background color to dark gray for better contrast
-  },
-  image: {
-    width: 150,
-    height: 150,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: "#fff", // Set text color to white
-  },
-});

@@ -14,6 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 import { getUserId } from "../services/utils";
 import { fetchUserProfile, uploadUserProfile } from "../services/api";
+import styles from "../styles";
 
 const majorCities = [
   { label: "Washington DC", value: "Washington DC" },
@@ -137,7 +138,7 @@ export default function ProfileScreen() {
       <RNPickerSelect
         onValueChange={(value) => setHomeCity(value)}
         items={majorCities}
-        style={pickerSelectStyles}
+        style={styles.pickerSelectStyles}
         value={homeCity}
         useNativeAndroidPickerStyle={false}
         placeholder={{ label: "Select a city", value: null }}
@@ -146,62 +147,3 @@ export default function ProfileScreen() {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    alignSelf: "flex-start",
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-    width: "100%",
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 16,
-  },
-  imagePlaceholder: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: "#ccc",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  imagePlaceholderText: {
-    color: "#fff",
-  },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-    width: "100%",
-  },
-  inputAndroid: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingHorizontal: 8,
-    width: "100%",
-  },
-});
