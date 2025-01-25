@@ -1,53 +1,62 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet } from "react-native";
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { HelloWave } from "@/components/HelloWave";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
 
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
+          source={require("@/assets/images/partial-react-logo.png")}
           style={styles.reactLogo}
         />
-      }>
+      }
+    >
+      {/* Title Section */}
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">CiviMeter</ThemedText>
         <HelloWave />
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+
+      {/* What We Do */}
+      <ThemedView style={styles.sectionContainer}>
+        <ThemedText type="subtitle">What We Do</ThemedText>
         <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
+          CiviMeter is an app that empowers community members to report
+          improperly parked cars. By submitting evidence and details of a
+          parking violation, you help promote safer, more organized streets—and
+          earn rewards along the way!
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
+
+      {/* How It Works */}
+      <ThemedView style={styles.sectionContainer}>
+        <ThemedText type="subtitle">How It Works</ThemedText>
         <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
+          1. Snap a photo of a poorly parked car.
+          {"\n"}
+          2. Our AI extracts key details like license plate and location.
+          {"\n"}
+          3. Submit the report and earn points instantly.
+          {"\n"}
+          4. Redeem your points for exciting rewards like gift cards and prizes!
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
+
+      {/* Why It Matters */}
+      <ThemedView style={styles.sectionContainer}>
+        <ThemedText type="subtitle">Why It Matters</ThemedText>
         <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+          CiviMeter encourages responsible parking habits and cleaner streets.
+          By reporting problems, you contribute to safer neighborhoods and
+          ensure that community resources are used effectively. As a reward for
+          your hard work, you can use the parking ticket fees to earn coins,
+          which can be redeemed for gift cards and other exciting prizes.
+          Together, we make a positive impact—one report at a time.
         </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
@@ -56,19 +65,20 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
+    marginBottom: 16,
   },
-  stepContainer: {
+  sectionContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 16,
   },
   reactLogo: {
     height: 178,
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });

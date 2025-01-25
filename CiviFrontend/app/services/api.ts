@@ -68,7 +68,7 @@ export async function fetchHistory(
             isSafetyHazard: false,
             coinsAwarded: 10,
             imageUrl:
-              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+              "https://via.placeholder.com/150/0000FF/808080?text=No+Parking",
           },
           {
             licensePlate: "XYZ789",
@@ -76,7 +76,7 @@ export async function fetchHistory(
             isSafetyHazard: true,
             coinsAwarded: 20,
             imageUrl:
-              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+              "https://via.placeholder.com/150/FF0000/FFFFFF?text=Fire+Hydrant",
           },
           {
             licensePlate: "LMN456",
@@ -84,7 +84,7 @@ export async function fetchHistory(
             isSafetyHazard: false,
             coinsAwarded: 15,
             imageUrl:
-              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+              "https://via.placeholder.com/150/00FF00/000000?text=Double+Parked",
           },
         ];
 
@@ -98,6 +98,110 @@ export async function fetchHistory(
     return response;
   } catch (error) {
     console.error("Error fetching history:", error);
+    throw error;
+  }
+}
+
+interface FetchUserCoinsResponse {
+  data: {
+    coins: number;
+  };
+}
+
+export async function fetchUserCoins(
+  userId: string,
+): Promise<FetchUserCoinsResponse> {
+  try {
+    // Log the user ID
+    console.log("Fetching coins for User ID:", userId);
+
+    // Simulate an API call with dummy data
+    const response = await new Promise<FetchUserCoinsResponse>((resolve) => {
+      setTimeout(() => {
+        resolve({
+          data: {
+            coins: 100, // Dummy value for coins
+          },
+        });
+      }, 1000);
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching user coins:", error);
+    throw error;
+  }
+}
+
+interface GiftCard {
+  name: string;
+  value: number;
+  imageUrl: string;
+  coinCost: number;
+  website: string;
+}
+
+interface FetchGiftCardsResponse {
+  data: GiftCard[];
+}
+
+export async function fetchGiftCards(): Promise<FetchGiftCardsResponse> {
+  try {
+    // Simulate an API call with dummy data
+    const response = await new Promise<FetchGiftCardsResponse>((resolve) => {
+      setTimeout(() => {
+        const dummyData: GiftCard[] = [
+          {
+            name: "CVS",
+            value: 10,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 1000,
+            website: "https://www.cvs.com",
+          },
+          {
+            name: "Coke",
+            value: 5,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 500,
+            website: "https://www.coca-cola.com",
+          },
+          {
+            name: "Amazon",
+            value: 25,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 2500,
+            website: "https://www.amazon.com",
+          },
+          {
+            name: "Steam",
+            value: 20,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 2000,
+            website: "https://store.steampowered.com",
+          },
+          {
+            name: "Lyft",
+            value: 15,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 1500,
+            website: "https://www.lyft.com",
+          },
+          {
+            name: "Uber",
+            value: 15,
+            imageUrl: "https://media.gamestop.com/i/gamestop/10116382?$pdp$",
+            coinCost: 1500,
+            website: "https://www.uber.com",
+          },
+        ];
+
+        resolve({ data: dummyData });
+      }, 1000);
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching gift cards:", error);
     throw error;
   }
 }
