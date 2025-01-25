@@ -272,3 +272,59 @@ export async function uploadUserProfile(
     }
   }
 }
+interface Location {
+  id: number;
+  latitude: number;
+  longitude: number;
+  title: string;
+  description: string;
+  coinPrize: number;
+}
+
+interface FetchLocationsResponse {
+  data: Location[];
+}
+
+export async function fetchLocations(): Promise<FetchLocationsResponse> {
+  if (USE_DUMMY_API) {
+    return new Promise<FetchLocationsResponse>((resolve) => {
+      setTimeout(() => {
+        const dummyData: Location[] = [
+          {
+            id: 1,
+            latitude: 38.89511,
+            longitude: -77.03637,
+            title: "Location 1",
+            description: "Description for Location 1",
+            coinPrize: 10,
+          },
+          {
+            id: 2,
+            latitude: 38.8895,
+            longitude: -77.0353,
+            title: "Location 2",
+            description: "Description for Location 2",
+            coinPrize: 20,
+          },
+          {
+            id: 3,
+            latitude: 38.8893,
+            longitude: -77.0502,
+            title: "Location 3",
+            description: "Description for Location 3",
+            coinPrize: 15,
+          },
+        ];
+        resolve({ data: dummyData });
+      }, 1000);
+    });
+  } else {
+    try {
+      const response = await axios.get(`${API_URL}/api/locations`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching locations:", error);
+      throw error;
+    }
+  }
+}
