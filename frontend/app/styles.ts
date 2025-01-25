@@ -95,6 +95,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 15,
   },
+  modalButtonContainer: {
+    marginTop: 20,
+  },
   newIncidentButton: {
     position: "absolute",
     top: 40,
