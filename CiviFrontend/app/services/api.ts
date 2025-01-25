@@ -38,3 +38,66 @@ export async function uploadPhoto(
     throw error;
   }
 }
+
+interface HistoryEntry {
+  licensePlate: string;
+  description: string;
+  isSafetyHazard: boolean;
+  coinsAwarded: number;
+  imageUrl: string;
+}
+
+interface FetchHistoryResponse {
+  data: HistoryEntry[];
+}
+
+export async function fetchHistory(
+  userId: string,
+): Promise<FetchHistoryResponse> {
+  try {
+    // Log the user ID
+    console.log("Fetching history for User ID:", userId);
+
+    // Simulate an API call with dummy data
+    const response = await new Promise<FetchHistoryResponse>((resolve) => {
+      setTimeout(() => {
+        const dummyData: HistoryEntry[] = [
+          {
+            licensePlate: "ABC123",
+            description: "Parked in a no-parking zone",
+            isSafetyHazard: false,
+            coinsAwarded: 10,
+            imageUrl:
+              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+          },
+          {
+            licensePlate: "XYZ789",
+            description: "Blocking a fire hydrant",
+            isSafetyHazard: true,
+            coinsAwarded: 20,
+            imageUrl:
+              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+          },
+          {
+            licensePlate: "LMN456",
+            description: "Double parked",
+            isSafetyHazard: false,
+            coinsAwarded: 15,
+            imageUrl:
+              "https://media.istockphoto.com/id/480652712/photo/dealer-new-cars-stock.jpg?s=612x612&w=0&k=20&c=Mzfb5oEeovQblEo160df-xFxfd6dGoLBkqjjDWQbd5E=",
+          },
+        ];
+
+        // Randomize the order of the entries
+        const randomizedData = dummyData.sort(() => Math.random() - 0.5);
+
+        resolve({ data: randomizedData });
+      }, 1000);
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error fetching history:", error);
+    throw error;
+  }
+}
