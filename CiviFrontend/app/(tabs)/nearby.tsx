@@ -15,6 +15,7 @@ import { fetchLocations, uploadPhoto } from "../services/api";
 import { getUserId } from "../services/utils";
 import CameraScreen from "./camera";
 import styles from "../styles";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function NearbyScreen() {
   const [location, setLocation] = useState(null);
@@ -22,6 +23,7 @@ export default function NearbyScreen() {
   const [locations, setLocations] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
+  const mapRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -46,6 +48,20 @@ export default function NearbyScreen() {
     setShowCamera(true);
   };
 
+  const centerMapOnUser = async () => {
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation(location.coords);
+
+    if (location && mapRef.current) {
+      mapRef.current.animateToRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+    }
+  };
+
   let text = "Waiting..";
   if (errorMsg) {
     text = errorMsg;
@@ -57,6 +73,7 @@ export default function NearbyScreen() {
     <View style={styles.container}>
       {location ? (
         <MapView
+          ref={mapRef}
           style={styles.map}
           initialRegion={{
             latitude: location.latitude,
@@ -120,6 +137,9 @@ export default function NearbyScreen() {
         <Text style={styles.newIncidentButtonText}>+</Text>
       </TouchableOpacity>
       {showCamera && <CameraScreen onClose={() => setShowCamera(false)} />}
+      <TouchableOpacity style={styles.centerButton} onPress={centerMapOnUser}>
+        <Ionicons name="locate" size={24} color="white" />
+      </TouchableOpacity>
     </View>
   );
 }

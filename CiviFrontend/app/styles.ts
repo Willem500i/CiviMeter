@@ -111,6 +111,21 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  centerButton: {
+    position: "absolute",
+    bottom: 40,
+    right: 20,
+    backgroundColor: "blue",
+    padding: 10,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  centerButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 
   // Profile styles
   profileContainer: {
