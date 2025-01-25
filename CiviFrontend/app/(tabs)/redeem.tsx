@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Linking,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { fetchUserCoins, fetchGiftCards } from "../services/api";
 import { getUserId } from "../services/utils";
 
@@ -24,19 +25,27 @@ export default function RedeemScreen() {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchUserIdAndData() {
+    async function fetchUserId() {
       const id = await getUserId();
       setUserId(id);
-      if (id) {
-        const coinsResponse = await fetchUserCoins(id);
-        setCoins(coinsResponse.data.coins);
-
-        const giftCardsResponse = await fetchGiftCards();
-        setGiftCards(giftCardsResponse.data);
-      }
     }
-    fetchUserIdAndData();
+    fetchUserId();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchData() {
+        if (userId) {
+          const coinsResponse = await fetchUserCoins(userId);
+          setCoins(coinsResponse.data.coins);
+
+          const giftCardsResponse = await fetchGiftCards();
+          setGiftCards(giftCardsResponse.data);
+        }
+      }
+      fetchData();
+    }, [userId]),
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>

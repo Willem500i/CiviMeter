@@ -2,10 +2,6 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route("/")
-def index():
-    return "Hello, World!"
-
 @app.route('/api/submit', methods=['POST'])
 def submit():
     user_id = request.form.get('userId')
@@ -55,7 +51,7 @@ def gift_cards():
         {
             'name': 'CVS',
             'value': 10,
-            'imageUrl': 'https://www.giftcards.com/content/dam/bhn/live/nam/us/en/catalog-assets/product-images/07675019055/07675019055_74842_master.png/_jcr_content/renditions/cq5dam.web.1280.1280.jpeg',
+            'imageUrl': 'https://via.placeholder.com/150/FF0000/FFFFFF?text=CVS',
             'coinCost': 1000,
             'website': 'https://www.cvs.com',
         },
@@ -96,6 +92,27 @@ def gift_cards():
         },
     ]
     return jsonify({'data': dummy_data}), 200
+
+@app.route('/api/userprofile', methods=['POST'])
+def fetch_user_profile():
+    user_id = request.json.get('userId')
+    # Fetch user profile for the user_id
+    dummy_data = {
+        'userId': user_id,
+        'firstName': 'John',
+        'lastName': 'Doe',
+        'email': 'john.doe@example.com',
+        'phoneNumber': '123-456-7890',
+        'homeCity': 'New York',
+        'profilePicture': 'https://via.placeholder.com/150',
+    }
+    return jsonify({'data': dummy_data}), 200
+
+@app.route('/api/userprofile/upload', methods=['POST'])
+def upload_user_profile():
+    user_profile = request.json
+    # Process and save the user profile as needed
+    return jsonify({'message': 'Profile uploaded successfully'}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)

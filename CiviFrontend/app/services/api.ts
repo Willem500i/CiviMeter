@@ -2,7 +2,7 @@ import axios from "axios";
 
 const USE_DUMMY_API = true; // Set this to false to use real API calls
 
-const API_URL = "https://your-api-url.com";
+const API_URL = "http://10.150.242.114:5000/";
 
 interface UploadPhotoResponse {
   data: {
@@ -194,6 +194,80 @@ export async function fetchGiftCards(): Promise<FetchGiftCardsResponse> {
       return response.data;
     } catch (error) {
       console.error("Error fetching gift cards:", error);
+      throw error;
+    }
+  }
+}
+
+interface UserProfile {
+  userId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  homeCity: string;
+  profilePicture: string | null;
+}
+
+interface FetchUserProfileResponse {
+  data: UserProfile;
+}
+
+export async function fetchUserProfile(
+  userId: string,
+): Promise<FetchUserProfileResponse> {
+  if (USE_DUMMY_API) {
+    return new Promise<FetchUserProfileResponse>((resolve) => {
+      setTimeout(() => {
+        const dummyData: UserProfile = {
+          userId,
+          firstName: "John",
+          lastName: "Doe",
+          email: "john.doe@example.com",
+          phoneNumber: "123-456-7890",
+          homeCity: "New York",
+          profilePicture: "https://via.placeholder.com/150",
+        };
+        resolve({ data: dummyData });
+      }, 1000);
+    });
+  } else {
+    try {
+      const response = await axios.post(`${API_URL}/api/userprofile`, {
+        userId,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+      throw error;
+    }
+  }
+}
+
+interface UploadUserProfileResponse {
+  data: {
+    message: string;
+  };
+}
+
+export async function uploadUserProfile(
+  userProfile: UserProfile,
+): Promise<UploadUserProfileResponse> {
+  if (USE_DUMMY_API) {
+    return new Promise<UploadUserProfileResponse>((resolve) => {
+      setTimeout(() => {
+        resolve({ data: { message: "Profile uploaded successfully" } });
+      }, 1000);
+    });
+  } else {
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/userprofile/upload`,
+        userProfile,
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Error uploading user profile:", error);
       throw error;
     }
   }

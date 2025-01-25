@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import { fetchHistory } from "../services/api";
 import { getUserId } from "../services/utils";
 
@@ -16,16 +17,24 @@ export default function HistoryScreen() {
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchUserIdAndHistory() {
+    async function fetchUserId() {
       const id = await getUserId();
       setUserId(id);
-      if (id) {
-        const response = await fetchHistory(id);
-        setHistory(response.data);
-      }
     }
-    fetchUserIdAndHistory();
+    fetchUserId();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchData() {
+        if (userId) {
+          const response = await fetchHistory(userId);
+          setHistory(response.data);
+        }
+      }
+      fetchData();
+    }, [userId]),
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
