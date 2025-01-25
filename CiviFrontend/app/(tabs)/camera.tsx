@@ -14,13 +14,7 @@ import { getUserId } from "../services/utils";
 import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
-export default function CameraScreen({
-  onClose,
-  incidentId,
-}: {
-  onClose: () => void;
-  incidentId: number;
-}) {
+export default function CameraScreen({ onClose }: { onClose: () => void }) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);
@@ -83,12 +77,7 @@ export default function CameraScreen({
   async function savePhoto() {
     if (photoUri && userId && location) {
       try {
-        const response = await uploadPhoto(
-          photoUri,
-          userId,
-          location,
-          incidentId,
-        );
+        const response = await uploadPhoto(photoUri, userId, location);
         console.log("Image uploaded successfully:", response);
 
         // Show success banner
