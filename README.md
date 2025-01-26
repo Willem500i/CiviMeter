@@ -22,21 +22,55 @@ CiviMeter encourages responsible parking habits and cleaner streets. By reportin
 
 ## Installation
 
+### Backend (Flask)
+
 1. Clone the repository:
    ```sh
    git clone https://github.com/yourusername/CiviMeter.git
    ```
-2. Navigate to the project directory:
+2. Navigate to the backend directory:
    ```sh
-   cd CiviMeter
+   cd CiviMeter/backend
    ```
-3. Install dependencies:
+3. Create a virtual environment:
+   ```sh
+   python -m venv venv
+   ```
+4. Activate the virtual environment:
+   - On Windows:
+     ```sh
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```sh
+     source venv/bin/activate
+     ```
+5. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+6. Start the Flask server:
+   ```sh
+   flask run
+   ```
+
+### Frontend (React Native)
+
+1. Navigate to the frontend directory:
+   ```sh
+   cd CiviMeter/frontend
+   ```
+2. Install dependencies:
    ```sh
    npm install
    ```
+3. Install `npx` if not already installed:
+   ```sh
+   npm install -g npx
+   ```
 4. Start the development server:
    ```sh
-   npm start
+   npx expo start
    ```
 
 ## API Endpoints
