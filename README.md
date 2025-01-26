@@ -63,11 +63,21 @@ These initiatives demonstrate a growing trend toward involving citizens in urban
      ```
 5. Install dependencies:
    ```sh
-   pip install -r requirements.txt
+   pip install pymongo
+   pip install bson
+   pip install gridfs
+   pip install openai
+   pip install flask
    ```
-6. Start the Flask server:
+6. Configure system variables:
    ```sh
-   flask run
+   Ensure the environment variables "OPENAI_ORG", "OPENAI_PROJECT", "OPENAI_API_KEY",
+   "MONGO_URI" have been set. Additionally, you will likely need to change the host IP and/or       
+   configure a new MongoDB Atlas project.
+   ```
+7. Start the Flask server:
+   ```sh
+   py app.py
    ```
 
 ### Frontend (React Native)
