@@ -93,13 +93,13 @@ export default function CameraScreen({
         const response = await uploadPhoto(
           photoUri,
           userId,
-          location,
+          { latitude: location.latitude, longitude: location.longitude },
           incidentId,
         );
         console.log("Image uploaded successfully:", response);
 
         // Show success banner
-        Alert.alert("Success", response.data.message);
+        Alert.alert("Success", "Image uploaded successfully");
 
         // Clear the photoUri to allow taking a new photo
         setPhotoUri(null);
@@ -127,11 +127,16 @@ export default function CameraScreen({
     setPhotoUri(null);
   }
 
+  function handleClose() {
+    setPhotoUri(null);
+    onClose();
+  }
+
   return (
     <View style={styles.container}>
       {!photoUri ? (
         <CameraView style={styles.camera} facing={facing} ref={cameraRef}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <TouchableOpacity style={styles.closeButton} onPress={handleClose}>
             <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
           <View style={styles.buttonContainer}>

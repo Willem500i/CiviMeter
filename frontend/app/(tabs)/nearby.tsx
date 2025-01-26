@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import * as ExpoLocation from "expo-location";
@@ -32,6 +33,7 @@ export default function NearbyScreen() {
     useState<CustomLocation | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [incidentId, setIncidentId] = useState(0);
+  const [loading, setLoading] = useState(true);
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function NearbyScreen() {
       let { status } = await ExpoLocation.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
+        setLoading(false);
         return;
       }
 
@@ -47,6 +50,7 @@ export default function NearbyScreen() {
 
       const response = await fetchLocations();
       setLocations(response.data);
+      setLoading(false);
     })();
   }, []);
 
@@ -84,7 +88,9 @@ export default function NearbyScreen() {
 
   return (
     <View style={styles.container}>
-      {location ? (
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : location ? (
         <MapView
           ref={mapRef}
           style={styles.map}
@@ -106,10 +112,10 @@ export default function NearbyScreen() {
           />
           {locations.map((location) => (
             <Marker
-              key={location.index}
+              key={`${location.index}-${location.title}-${location.latitude}-${location.longitude}`}
               coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
+                latitude: Number(location.latitude),
+                longitude: Number(location.longitude),
               }}
               title={location.title}
               description={location.description}
@@ -133,7 +139,7 @@ export default function NearbyScreen() {
               {selectedLocation.description}
             </Text>
             <Text style={styles.modalDescription}>
-              Coin Prize: {selectedLocation.coinPrize}
+              Bounty: {selectedLocation.coinPrize}
             </Text>
             <View style={styles.modalButtonContainer}>
               <Button
