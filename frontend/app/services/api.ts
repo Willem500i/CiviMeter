@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const USE_DUMMY_API = true; // Set this to false to use real API calls
+const USE_DUMMY_API = false; // Set this to false to use real API calls
 
-const API_URL = "http://10.150.242.114:5000/";
+const API_URL = "http://10.150.237.229:5000/";
 
 interface UploadPhotoResponse {
   data: {
@@ -32,13 +32,27 @@ export async function uploadPhoto(
     formData.append("userId", userId);
     formData.append("latitude", location.latitude.toString());
     formData.append("longitude", location.longitude.toString());
-    formData.append("incidentId", incidentId.toString());
+    formData.append("index", incidentId.toString());
+
+    console.log(incidentId);
 
     try {
-      const response = await axios.post(`${API_URL}/api/submit`, formData);
+      console.log("Uploading image...");
+      const response = await axios.post(
+        `${API_URL}/api/submit_incident`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
       return response.data;
     } catch (error) {
-      console.error("Error uploading image:", error);
+      console.error(
+        "Error uploading image:",
+        (error as any).toJSON ? (error as any).toJSON() : error,
+      );
       throw error;
     }
   }
@@ -242,6 +256,7 @@ export async function fetchUserProfile(
     });
   } else {
     try {
+      console.log("Fetching user profile for userId:", userId);
       const response = await axios.post(`${API_URL}/api/userprofile`, {
         userId,
       });
@@ -277,7 +292,7 @@ export async function uploadUserProfile(
 }
 
 interface Location {
-  id: number;
+  index: number;
   latitude: number;
   longitude: number;
   title: string;
@@ -295,7 +310,7 @@ export async function fetchLocations(): Promise<FetchLocationsResponse> {
       setTimeout(() => {
         const dummyData: Location[] = [
           {
-            id: 1,
+            index: 1,
             latitude: 38.89511,
             longitude: -77.03637,
             title: "Location 1",
@@ -303,7 +318,7 @@ export async function fetchLocations(): Promise<FetchLocationsResponse> {
             coinPrize: 10,
           },
           {
-            id: 2,
+            index: 2,
             latitude: 38.8895,
             longitude: -77.0353,
             title: "Location 2",
@@ -311,7 +326,7 @@ export async function fetchLocations(): Promise<FetchLocationsResponse> {
             coinPrize: 20,
           },
           {
-            id: 3,
+            index: 3,
             latitude: 38.8893,
             longitude: -77.0502,
             title: "Location 3",

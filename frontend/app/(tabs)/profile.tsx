@@ -14,6 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
 import { getUserId } from "../services/utils";
 import { fetchUserProfile, uploadUserProfile } from "../services/api";
+import * as FileSystem from "expo-file-system";
 import styles from "../styles";
 
 const majorCities = [
@@ -71,7 +72,10 @@ export default function ProfileScreen() {
     });
 
     if (!result.canceled) {
-      setProfilePicture(result.assets[0].uri);
+      const base64 = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      setProfilePicture(`data:image/jpeg;base64,${base64}`);
     }
   };
 
@@ -86,7 +90,6 @@ export default function ProfileScreen() {
         homeCity,
         profilePicture,
       };
-
       try {
         const response = await uploadUserProfile(userProfile);
         Alert.alert("Success", "Profile uploaded successfully");
@@ -96,7 +99,6 @@ export default function ProfileScreen() {
       }
     }
   };
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity onPress={pickImage}>
@@ -138,7 +140,10 @@ export default function ProfileScreen() {
       <RNPickerSelect
         onValueChange={(value) => setHomeCity(value)}
         items={majorCities}
-        style={styles.pickerSelectStyles}
+        style={{
+          inputIOS: styles.pickerSelectStylesIOS,
+          inputAndroid: styles.pickerSelectStylesIOS,
+        }}
         value={homeCity}
         useNativeAndroidPickerStyle={false}
         placeholder={{ label: "Select a city", value: null }}

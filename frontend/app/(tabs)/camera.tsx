@@ -1,5 +1,6 @@
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
+import * as FileSystem from "expo-file-system";
 import { useRef, useState, useEffect } from "react";
 import {
   Button,
@@ -16,10 +17,10 @@ import styles from "../styles";
 
 export default function CameraScreen({
   onClose,
-  incidentId,
+  incidentId = 0,
 }: {
   onClose: () => void;
-  incidentId: number;
+  incidentId?: number;
 }) {
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
@@ -75,7 +76,10 @@ export default function CameraScreen({
         base64: false,
       });
       if (photo) {
-        setPhotoUri(photo.uri);
+        const base64 = await FileSystem.readAsStringAsync(photo.uri, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        setPhotoUri(`data:image/jpeg;base64,${base64}`);
       }
     }
   }
@@ -83,6 +87,11 @@ export default function CameraScreen({
   async function savePhoto() {
     if (photoUri && userId && location) {
       try {
+        console.log("photoUri:", photoUri);
+        console.log("userId:", userId);
+        console.log("location:", location);
+        console.log("incidentId:", incidentId);
+
         const response = await uploadPhoto(
           photoUri,
           userId,

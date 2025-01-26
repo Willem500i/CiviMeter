@@ -170,25 +170,23 @@ const styles = StyleSheet.create({
   imagePlaceholderText: {
     color: "#fff",
   },
-  pickerSelectStyles: {
-    inputIOS: {
-      height: 40,
-      borderColor: "#ccc",
-      borderWidth: 1,
-      marginBottom: 16,
-      paddingHorizontal: 8,
-      width: "100%",
-      color: "white",
-    },
-    inputAndroid: {
-      height: 40,
-      borderColor: "#ccc",
-      borderWidth: 1,
-      marginBottom: 16,
-      paddingHorizontal: 8,
-      width: "100%",
-      color: "white",
-    },
+  pickerSelectStylesIOS: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingHorizontal: 8,
+    width: "100%",
+    color: "white",
+  },
+  pickerSelectStylesAndroid: {
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingHorizontal: 8,
+    width: "100%",
+    color: "white",
   },
 
   // Redeem styles

@@ -2,46 +2,51 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   Modal,
   Button,
-  Alert,
   TouchableOpacity,
-  Image,
+  Alert,
 } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import * as Location from "expo-location";
-import { fetchLocations, uploadPhoto } from "../services/api";
-import { getUserId } from "../services/utils";
+import * as ExpoLocation from "expo-location";
+import { fetchLocations } from "../services/api";
 import CameraScreen from "./camera";
 import styles from "../styles";
 import { Ionicons } from "@expo/vector-icons";
 
+type CustomLocation = {
+  index: number;
+  latitude: number;
+  longitude: number;
+  title: string;
+  description: string;
+  coinPrize: number;
+};
+
 export default function NearbyScreen() {
-  const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [location, setLocation] =
+    useState<ExpoLocation.LocationObjectCoords | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [locations, setLocations] = useState<CustomLocation[]>([]);
+  const [selectedLocation, setSelectedLocation] =
+    useState<CustomLocation | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [incidentId, setIncidentId] = useState(0);
-  const mapRef = useRef(null);
+  const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
     (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
+      let { status } = await ExpoLocation.requestForegroundPermissionsAsync();
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
+      let location = await ExpoLocation.getCurrentPositionAsync({});
       setLocation(location.coords);
 
       const response = await fetchLocations();
       setLocations(response.data);
-
-      const id = await getUserId();
-      setUserId(id);
     })();
   }, []);
 
@@ -50,14 +55,14 @@ export default function NearbyScreen() {
     setShowCamera(true);
   };
 
-  const handleReportIncident = (id) => {
-    setIncidentId(id); // Set the incident ID for existing incidents
+  const handleReportIncident = (index: number): void => {
+    setIncidentId(index); // Set the incident ID for existing incidents
     setSelectedLocation(null); // Close the popup
     setShowCamera(true);
   };
 
   const centerMapOnUser = async () => {
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await ExpoLocation.getCurrentPositionAsync({});
     setLocation(location.coords);
 
     if (location && mapRef.current) {
@@ -101,7 +106,7 @@ export default function NearbyScreen() {
           />
           {locations.map((location) => (
             <Marker
-              key={location.id}
+              key={location.index}
               coordinate={{
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -133,7 +138,7 @@ export default function NearbyScreen() {
             <View style={styles.modalButtonContainer}>
               <Button
                 title="Report Incident"
-                onPress={() => handleReportIncident(selectedLocation.id)}
+                onPress={() => handleReportIncident(selectedLocation.index)}
               />
               <Button title="Close" onPress={() => setSelectedLocation(null)} />
             </View>
