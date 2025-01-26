@@ -20,6 +20,22 @@ CiviMeter is an app that empowers community members to report improperly parked 
 
 CiviMeter encourages responsible parking habits and cleaner streets. By reporting problems, you contribute to safer neighborhoods and ensure that community resources are used effectively. As a reward for your hard work, you can use the parking ticket fees to earn coins, which can be redeemed for gift cards and other exciting prizes. Together, we make a positive impact—one report at a time.
 
+Several cities, including New York City, have proposed or implemented legislation to empower citizens to report parking violations, aiming to improve urban mobility and safety.
+
+### New York City Initiatives
+
+- **Proposed Citizen Reporting Program**: In 2022, Council Member Lincoln Restler introduced a bill that would allow New Yorkers to report illegal parking by submitting photos or videos to the Department of Transportation. If the report led to a ticket, the citizen would receive 25% of the $175 fine.
+  - [Read more](https://www.westsidespirit.com/news/bill-would-allow-new-yorkers-to-report-parking-violations-YC2235320)
+- **Program Modifications**: By 2023, the bill advanced with modifications. While the financial incentive was removed, the legislation focused on creating an app to facilitate the seamless filing of complaints for illegal parking behavior.
+  - [Read more](https://nyc.streetsblog.org/2023/03/03/breaking-citizen-reporting-bill-moves-forward-but-in-a-watered-down-form)
+
+### Similar Programs in Other Cities
+
+- **Los Angeles**: The Los Angeles Department of Transportation (LADOT) has a comprehensive parking enforcement program where traffic officers patrol 24/7 to enforce parking laws. While not citizen-driven, it reflects a commitment to strict parking regulation enforcement.
+  - [Read more](https://ladotparking.org/parking-enforcement/)
+
+These initiatives demonstrate a growing trend toward involving citizens in urban management, particularly in reporting parking violations. Such programs aim to enhance compliance with parking regulations, improve traffic flow, and promote safer streets.
+
 ## Installation
 
 ### Backend (Flask)
