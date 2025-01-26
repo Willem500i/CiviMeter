@@ -2,7 +2,7 @@ import axios from "axios";
 
 const USE_DUMMY_API = false; // Set this to false to use real API calls
 
-const API_URL = "http://10.150.237.229:5000/";
+const API_URL = "http://192.168.183.86:5000/";
 
 interface UploadPhotoResponse {
   data: {
@@ -34,8 +34,6 @@ export async function uploadPhoto(
     formData.append("longitude", location.longitude.toString());
     formData.append("index", incidentId.toString());
 
-    console.log(incidentId);
-
     try {
       console.log("Uploading image...");
       const response = await axios.post(
@@ -47,6 +45,7 @@ export async function uploadPhoto(
           },
         },
       );
+      console.log("Image uploaded successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error(
@@ -61,9 +60,9 @@ export async function uploadPhoto(
 interface HistoryEntry {
   licensePlate: string;
   description: string;
-  isSafetyHazard: boolean;
   coinsAwarded: number;
   imageUrl: string;
+  confidence: number;
 }
 
 interface FetchHistoryResponse {
@@ -80,26 +79,26 @@ export async function fetchHistory(
           {
             licensePlate: "ABC123",
             description: "Parked in a no-parking zone",
-            isSafetyHazard: false,
             coinsAwarded: 10,
             imageUrl:
               "https://via.placeholder.com/150/0000FF/808080?text=No+Parking",
+            confidence: 95,
           },
           {
             licensePlate: "XYZ789",
             description: "Blocking a fire hydrant",
-            isSafetyHazard: true,
             coinsAwarded: 20,
             imageUrl:
               "https://via.placeholder.com/150/FF0000/FFFFFF?text=Fire+Hydrant",
+            confidence: 90,
           },
           {
             licensePlate: "LMN456",
             description: "Double parked",
-            isSafetyHazard: false,
             coinsAwarded: 15,
             imageUrl:
               "https://via.placeholder.com/150/00FF00/000000?text=Double+Parked",
+            confidence: 85,
           },
         ];
         resolve({ data: dummyData });
@@ -107,7 +106,9 @@ export async function fetchHistory(
     });
   } else {
     try {
+      console.log("Fetching history for userId:", userId);
       const response = await axios.post(`${API_URL}/api/history`, { userId });
+      console.log("History fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching history:", error);
@@ -133,7 +134,9 @@ export async function fetchUserCoins(
     });
   } else {
     try {
+      console.log("Fetching user coins for userId:", userId);
       const response = await axios.post(`${API_URL}/api/usercoins`, { userId });
+      console.log("User coins fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching user coins:", error);
@@ -209,7 +212,9 @@ export async function fetchGiftCards(): Promise<FetchGiftCardsResponse> {
     });
   } else {
     try {
+      console.log("Fetching gift cards...");
       const response = await axios.get(`${API_URL}/api/giftcards`);
+      console.log("Gift cards fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching gift cards:", error);
@@ -260,6 +265,7 @@ export async function fetchUserProfile(
       const response = await axios.post(`${API_URL}/api/userprofile`, {
         userId,
       });
+      console.log("User profile fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -279,10 +285,12 @@ export async function uploadUserProfile(
     });
   } else {
     try {
+      console.log("Uploading user profile for userId:", userProfile.userId);
       const response = await axios.post(
         `${API_URL}/api/userprofile/upload`,
         userProfile,
       );
+      console.log("User profile uploaded successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error uploading user profile:", error);
@@ -339,7 +347,9 @@ export async function fetchLocations(): Promise<FetchLocationsResponse> {
     });
   } else {
     try {
+      console.log("Fetching locations...");
       const response = await axios.get(`${API_URL}/api/locations`);
+      console.log("Locations fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching locations:", error);
@@ -347,3 +357,13 @@ export async function fetchLocations(): Promise<FetchLocationsResponse> {
     }
   }
 }
+
+export default {
+  uploadPhoto,
+  fetchHistory,
+  fetchUserCoins,
+  fetchGiftCards,
+  fetchUserProfile,
+  uploadUserProfile,
+  fetchLocations,
+};

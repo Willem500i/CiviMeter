@@ -280,6 +280,24 @@ const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
   },
+  uploadingIndicator: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: [{ translateX: -25 }, { translateY: -25 }],
+  },
+  disabledButton: {
+    opacity: 0.5,
+  },
+  loadingText: {
+    marginTop: 10,
+    color: "#ffffff",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  centerText: {
+    textAlign: "center",
+  },
 });
 
 export default styles;

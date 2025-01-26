@@ -8,9 +8,9 @@ import styles from "../styles";
 interface HistoryEntry {
   licensePlate: string;
   description: string;
-  isSafetyHazard: boolean;
   coinsAwarded: number;
   imageUrl: string;
+  confidence: number;
 }
 
 export default function HistoryScreen() {
@@ -49,11 +49,9 @@ export default function HistoryScreen() {
             Description: {entry.description}
           </Text>
           <Text style={styles.historyText}>
-            Safety Hazard: {entry.isSafetyHazard ? "Yes" : "No"}
-          </Text>
-          <Text style={styles.historyText}>
             Coins Awarded: {entry.coinsAwarded}
           </Text>
+          <Text style={styles.historyText}>Confidence: {entry.confidence}</Text>
         </View>
       ))}
     </ScrollView>

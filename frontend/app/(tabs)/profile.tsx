@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import RNPickerSelect from "react-native-picker-select";
@@ -39,6 +40,7 @@ export default function ProfileScreen() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [homeCity, setHomeCity] = useState<string>("");
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -57,6 +59,8 @@ export default function ProfileScreen() {
           setProfilePicture(profile.profilePicture);
         } catch (error) {
           console.error("Error fetching user profile:", error);
+        } finally {
+          setLoading(false);
         }
       }
     }
@@ -99,6 +103,18 @@ export default function ProfileScreen() {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#ffffff" />
+        <Text style={[styles.loadingText, styles.centerText]}>
+          Loading profile...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity onPress={pickImage}>

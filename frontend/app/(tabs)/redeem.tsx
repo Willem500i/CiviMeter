@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   Linking,
+  ActivityIndicator,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchUserCoins, fetchGiftCards } from "../services/api";
@@ -24,6 +25,7 @@ export default function RedeemScreen() {
   const [coins, setCoins] = useState<number>(0);
   const [giftCards, setGiftCards] = useState<GiftCard[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchUserId() {
@@ -37,16 +39,34 @@ export default function RedeemScreen() {
     useCallback(() => {
       async function fetchData() {
         if (userId) {
-          const coinsResponse = await fetchUserCoins(userId);
-          setCoins(coinsResponse.data.coins);
+          setLoading(true);
+          try {
+            const coinsResponse = await fetchUserCoins(userId);
+            setCoins(coinsResponse.data.coins);
 
-          const giftCardsResponse = await fetchGiftCards();
-          setGiftCards(giftCardsResponse.data);
+            const giftCardsResponse = await fetchGiftCards();
+            setGiftCards(giftCardsResponse.data);
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          } finally {
+            setLoading(false);
+          }
         }
       }
       fetchData();
     }, [userId]),
   );
+
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#ffffff" />
+        <Text style={[styles.loadingText, styles.centerText]}>
+          Loading rewards...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.redeemContainer}>

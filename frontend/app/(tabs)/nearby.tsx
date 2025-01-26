@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import MapView, { Marker } from "react-native-maps";
 import * as ExpoLocation from "expo-location";
 import { fetchLocations } from "../services/api";
@@ -53,6 +54,16 @@ export default function NearbyScreen() {
       setLoading(false);
     })();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      async function fetchData() {
+        const response = await fetchLocations();
+        setLocations(response.data);
+      }
+      fetchData();
+    }, []),
+  );
 
   const handleNewIncident = async () => {
     setIncidentId(0); // New incidents have ID 0

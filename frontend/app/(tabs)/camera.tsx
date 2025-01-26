@@ -10,6 +10,7 @@ import {
   View,
   Image,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { uploadPhoto } from "../services/api";
 import { getUserId } from "../services/utils";
@@ -17,10 +18,10 @@ import { Ionicons } from "@expo/vector-icons";
 import styles from "../styles";
 
 export default function CameraScreen({
-  onClose,
+  onClose = () => {},
   incidentId = 0,
 }: {
-  onClose: () => void;
+  onClose?: () => void;
   incidentId?: number;
 }) {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -31,6 +32,7 @@ export default function CameraScreen({
     latitude: number;
     longitude: number;
   } | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
   const cameraRef = useRef<CameraView>(null);
 
   useEffect(() => {
@@ -106,6 +108,8 @@ export default function CameraScreen({
         onClose(); // Close the camera screen after saving the photo
       } catch (error) {
         console.error("Error uploading image:", error);
+      } finally {
+        setUploading(false);
       }
     }
   }
@@ -154,17 +158,36 @@ export default function CameraScreen({
           <TouchableOpacity
             style={styles.saveImageButton}
             onPress={saveToCameraRoll}
+            disabled={uploading}
           >
             <Ionicons name="arrow-down-circle" size={70} color="white" />
           </TouchableOpacity>
           <View style={styles.buttonRow}>
-            <TouchableOpacity style={styles.retakeButton} onPress={retakePhoto}>
+            <TouchableOpacity
+              style={styles.retakeButton}
+              onPress={retakePhoto}
+              disabled={uploading}
+            >
               <Ionicons name="refresh-circle" size={70} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.saveButton} onPress={savePhoto}>
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                setUploading(true);
+                savePhoto();
+              }}
+              disabled={uploading}
+            >
               <Ionicons name="checkmark-circle" size={70} color="white" />
             </TouchableOpacity>
           </View>
+          {uploading && (
+            <ActivityIndicator
+              size="large"
+              color="#ffffff"
+              style={styles.uploadingIndicator}
+            />
+          )}
         </View>
       )}
     </View>

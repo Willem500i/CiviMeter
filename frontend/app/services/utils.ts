@@ -5,3 +5,7 @@ export async function getUserId() {
   const deviceId = Device.osBuildId || Device.modelId || uuidv4();
   return `user-${deviceId}`;
 }
+
+export default {
+  getUserId,
+};
