@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   buttonRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     position: "absolute",
     bottom: 30,
     width: "80%",
@@ -62,6 +62,13 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     alignSelf: "flex-end",
+  },
+  saveImageButton: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    padding: 10,
+    borderRadius: 5,
   },
 
   // Nearby styles

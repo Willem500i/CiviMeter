@@ -10,6 +10,8 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import Feather from "@expo/vector-icons/Feather";
+
 import styles from "../styles";
 
 export default function TabLayout() {
@@ -52,7 +54,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="camera"
         options={{
-          title: "Camera",
+          title: "Report",
           tabBarIcon: ({ color }) => (
             <AntDesign name="camera" size={24} color={color} />
           ),
@@ -64,6 +66,15 @@ export default function TabLayout() {
           title: "History",
           tabBarIcon: ({ color }) => (
             <FontAwesome6 name="clock-rotate-left" size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="nearby" // Change the name to "nearby"
+        options={{
+          title: "Nearby",
+          tabBarIcon: ({ color }) => (
+            <Feather name="map-pin" size={24} color={color} />
           ),
         }}
       />

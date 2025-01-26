@@ -1,6 +1,7 @@
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import * as Location from "expo-location";
 import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from "expo-media-library";
 import { useRef, useState, useEffect } from "react";
 import {
   Button,
@@ -76,10 +77,7 @@ export default function CameraScreen({
         base64: false,
       });
       if (photo) {
-        const base64 = await FileSystem.readAsStringAsync(photo.uri, {
-          encoding: FileSystem.EncodingType.Base64,
-        });
-        setPhotoUri(`data:image/jpeg;base64,${base64}`);
+        setPhotoUri(photo.uri);
       }
     }
   }
@@ -112,6 +110,19 @@ export default function CameraScreen({
     }
   }
 
+  async function saveToCameraRoll() {
+    if (photoUri) {
+      try {
+        const asset = await MediaLibrary.createAssetAsync(photoUri);
+        await MediaLibrary.createAlbumAsync("Camera", asset, false);
+        Alert.alert("Success", "Image saved to camera roll");
+      } catch (error) {
+        console.error("Error saving image to camera roll:", error);
+        Alert.alert("Error", "Failed to save image to camera roll");
+      }
+    }
+  }
+
   function retakePhoto() {
     setPhotoUri(null);
   }
@@ -135,6 +146,12 @@ export default function CameraScreen({
       ) : (
         <View style={styles.photoContainer}>
           <Image source={{ uri: photoUri }} style={styles.photo} />
+          <TouchableOpacity
+            style={styles.saveImageButton}
+            onPress={saveToCameraRoll}
+          >
+            <Ionicons name="arrow-down-circle" size={70} color="white" />
+          </TouchableOpacity>
           <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.retakeButton} onPress={retakePhoto}>
               <Ionicons name="refresh-circle" size={70} color="white" />
